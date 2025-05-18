@@ -1,0 +1,22 @@
+services:
+  xwiki:
+    image: xwiki:lts
+    container_name: xwiki
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env
+    environment:
+      JAVA_OPTS: "-Doracle.net.tns_admin=/opt/oracle/wallet -Ddb.password=$XWIKI_DB_PASSWORD -Djavax.net.debug=all"
+      TNS_ADMIN: "/opt/oracle/wallet"
+    volumes:
+      - ./libs/ojdbc10.jar:/usr/local/tomcat/lib/ojdbc10.jar:ro
+      - ./libs/oraclepki.jar:/usr/local/tomcat/lib/oraclepki.jar:ro
+      - ./libs/osdt_cert.jar:/usr/local/tomcat/lib/osdt_cert.jar:ro
+      - ./libs/osdt_core.jar:/usr/local/tomcat/lib/osdt_core.jar:ro
+      - ./wallet:/opt/oracle/wallet
+      - ./hibernate.cfg.xml:/usr/local/xwiki/data/hibernate.cfg.xml:ro
+      - xwiki-data:/usr/local/xwiki
+
+volumes:
+  xwiki-data:
